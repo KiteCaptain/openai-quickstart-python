@@ -10,26 +10,24 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 @app.route("/", methods=("GET", "POST"))
 def index():
     if request.method == "POST":
-        animal = request.form["animal"]
+        place = request.form.get("place")
         response = openai.Completion.create(
             model="text-davinci-003",
-            prompt=generate_prompt(animal),
-            temperature=0.6,
-        )
-        return redirect(url_for("index", result=response.choices[0].text))
-
+            prompt=generate_prompt(place),
+            temperature=0.4,
+        )        
+        return redirect(url_for("index", result=response.choices[0].text, place=place ))
+    
+    place = request.args.get("place") 
     result = request.args.get("result")
-    return render_template("index.html", result=result)
+
+    return render_template("index.html", result=result, place=place)
 
 
-def generate_prompt(animal):
-    return """Suggest three names for an animal that is a superhero.
-
-Animal: Cat
-Names: Captain Sharpclaw, Agent Fluffball, The Incredible Feline
-Animal: Dog
-Names: Ruff the Protector, Wonder Canine, Sir Barks-a-Lot
-Animal: {}
-Names:""".format(
-        animal.capitalize()
+def generate_prompt(place):
+    return """Cool hangout locations in Kenya:
+Amboseli National Park,Lake Victoria,Nairobi,
+MtKenya National Park,Mombasa,Malindi
+""".format(
+        place.capitalize()
     )

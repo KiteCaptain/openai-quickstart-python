@@ -9,13 +9,26 @@
 </head>
 
 <body>
-  <img src="{{ url_for('static', filename='dog.png') }}" class="icon" />
-  <h3>Name my pet</h3>
+  <img src="{{ url_for('static', filename='vacation-seaside-resort-travel-summer-vacation-png.png') }}" class="icon" />
+  <h3>Wanna go somewhere? </h3>
+  <p>Enter a place to receive suggested vacation places</p>
   <form action="/" method="post">
-    <input type="text" name="animal" placeholder="Enter an animal" required />
-    <input type="submit" value="Generate names" />
+    <input type="text" name="place" placeholder="Enter a Place" required />
+    <input type="submit" value="Generate Vacation Place" />
   </form>
+ 
+
+    {% if place %}
+    <h4>You  Entered: <em>{{ place }}</em></h4>
+    {% endif %}
+
+
   {% if result %}
-  <div class="result">{{ result }}</div>
+  <div class="result">Suggested vacation sites in {{ place}}: </div>
+  <ul>
+  {% for site in result.split(",") %}
+    <li>{{ site }}</li>
+  {% endfor %}
+  </ul>
   {% endif %}
 </body>
